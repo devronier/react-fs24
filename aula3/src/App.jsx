@@ -4,12 +4,6 @@ import "./App.css";
 function App() {
   const [cidades, setCidades] = useState([]);
   const [estados, setEstados] = useState([]);
-  const [paginas, setPaginas] = useState(1);
-  const [inicio, setInicio] = useState(0);
-  const [fim, setFim] = useState(10);
-  const [paginaAtual, setPaginaAtual] = useState(1);
-
-  const perPage = 10
 
   async function getCidades(uf) {
     const resposta = await fetch(
@@ -17,8 +11,7 @@ function App() {
     );
 
     const dados = await resposta.json();
-    setPaginas(Math.ceil(dados.length / perPage))
-    setCidades(dados);
+     setCidades(dados);
   }
 
   async function getEstados() {
@@ -38,22 +31,10 @@ function App() {
 
   const estilo = { border: "1px solid red" };
 
-  useEffect(()=> {
-    setInicio((paginaAtual - 1) * perPage)
-    setFim(paginaAtual * perPage)
-
-  }, [paginaAtual])
-
   return (
     <>
-    <h1>Paginas: {paginas}</h1>
-    <h1>Inicio: {inicio}</h1>
-    <h1>Fim: {fim}</h1>
-    <h1>Pagina Atual: {paginaAtual}</h1>
-
-    <button disabled={paginaAtual == 1} onClick={() => setPaginaAtual(paginaAtual - 1)}>Anterior</button>
-    <button disabled={paginaAtual == paginas} onClick={() => setPaginaAtual(paginaAtual + 1)}>Proxima</button>
-      <div className="card">
+ 
+    <div className="card">
         <select onChange={(evento) => getCidades(evento.target.value)}>
           <option disabled>Selecione</option>
           {estados.map((estado, posicao) => (
@@ -66,7 +47,7 @@ function App() {
           <tr>
             <th style={estilo}>Nome da Cidade</th>
           </tr>
-          {cidades.slice(inicio, fim).map((cidade, posicao) => (
+          {cidades.map((cidade, posicao) => (
             <tr key={posicao}>
               <td style={estilo}>{cidade.nome}</td>
             </tr>
